@@ -8,6 +8,9 @@ from os import system
 myBudget=budget()
 system("cls")
 
+
+    
+
 while True:
     
     sel=input(
