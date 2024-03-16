@@ -1,15 +1,13 @@
 """
 Made to practice python.
 Will be used to manage my budget.
+Page1/3 (Main Page)
 """
-from method import budget
+from datainput import budget
 from os import system
 
 myBudget=budget()
 system("cls")
-
-
-    
 
 while True:
     
@@ -17,10 +15,10 @@ while True:
 """
 무엇을 하시겠습니까?
 1. 현재 보유 자산 수정
-2. 고정 수입 수정/추가
-3. 고정 지출 수정/추가
-4. 변동 수입 수정/추가
-5. 변동 지출 수정/추가
+2. 고정 수입 수정/추가/삭제
+3. 고정 지출 수정/추가/삭제
+4. 변동 수입 수정/추가/삭제
+5. 변동 지출 수정/추가/삭제
 6. 현재 정보 출력
 7. 저장
 8. 불러오기 (입력하신 정보가 덮어씌워집니다!))
@@ -46,10 +44,10 @@ while True:
         print(myBudget)
 
     elif sel=='7':
-        pass
+        myBudget.Save()
 
     elif sel=='8':
-        pass
+        myBudget.Load()
 
     elif sel=='9':
         system("cls")
