@@ -1,10 +1,16 @@
 import datetime
 
-"""This Function is for Loading"""
+"""This Functions are for Loading"""
 def loading(time):
     timeset=datetime.datetime.now()+datetime.timedelta(seconds=time)
     while datetime.datetime.now()<timeset:
         continue
+
+def pause():
+    temp=input("계속하시려면 아무 버튼이나 누르세요....\n")
+    if type(temp)==type(""):
+        return
+    
 """This Function Returns Selected Date, YMD Seperated By Selected 'type'"""
 class DateFunction():
     def __init__(self):
@@ -12,39 +18,25 @@ class DateFunction():
         self.c_str=""
 
     """You Can Just Use First Function for Inputting Data"""
-    def inputData(self,string,classifystr):
+    def inputData(self,string):
         self.edittype=string
-        self.c_str=classifystr
 
         sel=input(f"{self.edittype} 발생 월일을 입력하세요.\n (2024년 02월 17일: 240217)\n매년, 매월 발생하는 경우 해당 항목을 00으로 입력하세요.\n")
 
-        return self.getfDate(self.c_str,sel)
-    
-    def changeDataFormat(self,strtype,data):
-            temp=[]
-            cdate=''
-            for v in data:
-                if v =="-":
-                    temp.append(strtype)
-                else:
-                    temp.append(v)
+        return self.getfDate(sel)
 
-            for v in temp:
-                cdate+=v
-
-            return cdate
     
-    def getfDate(self,strtype,data):
+    def getfDate(self,data):
         if data=='now':
             date=datetime.datetime.now().strftime("%x")
-            return self.changeDataFormat(strtype,date)
+            return date
 
         elif len(data)==6:
             if ((data[0]=='0') & (data[1]=='0')) | ((data[2]=='0') & (data[3]=='0')):
                 pass
             
             date=datetime.datetime(int(f"20{data[0]}{data[1]}"),int(f"{data[2]}{data[3]}"),int(f"{data[4]}{data[5]}")).strftime("%x")
-            return self.changeDataFormat(strtype,date)
+            return date
 
         else:
             print("잘못된 형식입니다! 다시 입력해주세요.\n")
@@ -52,7 +44,7 @@ class DateFunction():
 
 class Save():
     def SaveData(self,data1,data2,data3,data4,data5):
-        f=open("d:/Programming/Money_V1.0/log.txt","w")
+        f=open("d:/Programming/Money_V1.0/money_v1.0/log1.txt","w")
         """자산입력"""
         f.write("자산\n")
         f.write(str(data1))
@@ -94,7 +86,7 @@ class Save():
 class Load():
 
     def LoadData(self,type1,str):
-        f=open("d:/Programming/Money_V1.0/log.txt","r")
+        f=open("d:/Programming/Money_V1.0/money_v1.0/log1.txt","r")
 
         while True:
             tempdata=f.readline().strip()
