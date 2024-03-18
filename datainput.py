@@ -12,42 +12,52 @@ class budget():
         self.outReasonBig=["여가","투자","식비","기타"]
 
     def changeValue(self, num, choice):
-            if (('만') not in num) or (('원') not in num):
-                if ('a'in num) or ('k'in num):
-                    print("잘못 입력하셨습니다!\n'만'을 의미하셨나요?\n")
-                    return num
-                elif ('d' in num) or ('n' in num) or ('s' in num) or ('j' in num):
-                    print("잘못 입력하셨습니다!\n'원'을 의미하셨나요?\n")
-                    return num
-                else:
-                    print("잘못 입력하셨습니다! 올바른 형식으로 다시 입력해주세요.\n")
-                    return num
-            else:
-                if choice==1:
-                    wan=num[:int(num.find("만"))].strip()
-                    down=num[int(num.find("만")+1):int(num.find("원"))].strip()
-                    
-                    if down=='':
-                        down='0'
-                        
-                    """한글이 들어간 경우 숫자(int)형 반환"""
-                    return int(wan)*10000+int(down)
+        if choice==1:
+            tt="0"
+            o="0"
+            while True:
+                templist=",".join(num.replace(" ","")).split(",")
+                if '만' in templist:
+                    templist[templist.index('만')]="-2"
+
+                if '원' in templist:
+                    templist[templist.index('원')]="-1"
+            
+                ite=[str(v) for v in list(range(-2,10))]
+                for j in templist:
+                    if (j not in ite):
+                        templist=",".join(input("올바른 형식이 아닙니다! 다시 입력하세요.\n").replace(" ","")).split(",")
+                        if '만' in templist:
+                            templist[templist.index('만')]="-2"
+
+                        if '원' in templist:
+                            templist[templist.index('원')]="-1"
+                        j=templist[0]
+                        continue
+
+                if '-2' not in templist:
+                    templist.insert(0,"-2")
+                if '-1' not in templist:
+                    templist.append("-1")
+
+                for v in templist[:templist.index("-2")]:
+                    tt+=v
+                for v in templist[templist.index("-2")+1:templist.index("-1")]:
+                    o+=v
+                break
+            returnnum=str(int(tt)*10000+int(o))
+            return returnnum
     
-                if choice==2:
-                    yi=int(int(num)/100000000)
-                    wan=int((int(num)-yi)/10000)
-                    down=int(num)-yi-wan
-                    """숫자로만 된 경우 한글(str)형 반환"""
-                    return str(yi)+"억"+str(wan)+"만"+str(down)
+        elif choice==2:
+            yi=int(int(num)/100000000)
+            wan=int((int(num)-yi)/10000)
+            down=int(num)-yi-wan
+            """숫자로만 된 경우 한글(str)형 반환"""
+            return str(yi)+"억"+str(wan)+"만"+str(down)
                     
     
     def editCurrentBudget(self):
-        asset=self.changeValue(input("현재 자산을 입력하세요.\n예:\n500000:50만원\n302567:30만2567원\n"),1)
-        while type(asset) != type(2):
-            asset=self.changeValue(input(""),1)
-            
-        self.current_budget=str(asset)
-        """저장은 str형으로 저장"""
+        self.current_budget=self.changeValue(input("현재 자산을 입력하세요.\n예:\n500000:50만원\n302567:30만2567원\n"),1)
 
     def inputData(self, destination1, destination2, string): 
         for v in destination2:
@@ -60,12 +70,12 @@ class budget():
             temporaryList=[]
             count=1
 
-            print(f"{"=":=^10}")
+            print(f"{"=":=^40}")
             for v in destination1:
                 temp=f"{str(count)}. "+v
                 print(temp)
                 count+=1
-            print(f"{"=":=^10}")
+            print(f"{"=":=^40}")
 
             sel=input("대분류를 선택하세요. (숫자 입력)\n")
             temporaryList.append(destination1[int(sel)-1])
@@ -77,7 +87,7 @@ class budget():
             temporaryList.append(sel)
 
             date=methods.DateFunction()
-            temporaryList.append(date.inputData(string,"/"))
+            temporaryList.append(date.inputData(string))
 
             while True:
                 if temporaryList in destination2:
@@ -95,7 +105,7 @@ class budget():
                         print("정확히 입력하십시오. (Y/N 중 하나 입력)")
                 else:
                     today=methods.DateFunction()
-                    temporaryList.append(today.getfDate("/","now"))
+                    temporaryList.append(today.getfDate("now"))
                     destination2.append(temporaryList)
                     print("성공적으로 입력되었습니다.")
                     break
@@ -129,6 +139,7 @@ class budget():
         elif selection=='x':
             if len(destination2)==0:
                 print("삭제할 항목이 없습니다!")
+                methods.pause()
                 return
             
             else:
@@ -139,6 +150,7 @@ class budget():
                 del destination2[sel-1]
             
                 print(f"{temp}가 성공적으로 삭제되었습니다.")
+                methods.pause()
         
         elif selection=='c':
             return
@@ -146,6 +158,7 @@ class budget():
     def Save(self):
         save=methods.Save()
         save.SaveData(self.current_budget,self.f_out_,self.f_in_,self.out_,self.in_)
+        print("성공적으로 저장되었습니다!\n")
 
     def Load(self):
         load=methods.Load()
@@ -154,6 +167,7 @@ class budget():
         self.f_out_=load.LoadData(self.f_out_,"고정지출")
         self.in_=load.LoadData(self.in_,"변동수입")
         self.out_=load.LoadData(self.out_,"변동지출")
+        print("성공적으로 불러왔습니다!")
 
     def __str__(self):
         total_f_in=self.getTotalValue(self.f_in_)
