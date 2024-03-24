@@ -1,13 +1,13 @@
-"""
-Made to practice python.
-Will be used to manage my budget.
-Page1/3 (Main Page)
-"""
+
+#Made to practice python.
+#Will be used to manage my budget.
+
 from datainput import budget
 from os import system
-from methods import pause,loading
+from methods import *
 
 myBudget=budget()
+
 while True:
     system("cls")
     sel=input(
@@ -22,54 +22,51 @@ f"""
 {"6.":<10}{" 현재 정보 출력":<40}
 {"7.":<10}{" 저장":<40}
 {"8.":<10}{" 불러오기":<40}
-{"9.":<10}{" 화면 지우기":<40}
-{"10.":<10}{" 나가기":<40}
+{"9.":<10}{" 나가기":<40}
 
-{"=":=^47}
+{"="*47}
 """)
     if sel=='1':
         system("cls")
         myBudget.editCurrentBudget()
-        pause()
+        TimingFunction.pause(myBudget)
 
     elif sel=='2':
         system("cls")
-        myBudget.inputData(myBudget.inReasonBig, myBudget.f_in_, "수입")
-        pause()
+        myBudget.inputData(myBudget.Reasons[0], myBudget.f_in_, "수입")
+        TimingFunction.pause(myBudget)
 
     elif sel=='3':
         system("cls")
-        myBudget.inputData(myBudget.outReasonBig, myBudget.f_out_, "지출")
-        pause()
+        myBudget.inputData(myBudget.Reasons[1], myBudget.f_out_, "지출")
+        TimingFunction.pause(myBudget)
 
     elif sel=='4':
         system("cls")
-        myBudget.inputData(myBudget.inReasonBig, myBudget.in_, "수입")
+        myBudget.inputData(myBudget.Reasons[0], myBudget.in_, "수입")
+        TimingFunction.pause(myBudget)
 
     elif sel=='5':
         system("cls")
-        myBudget.inputData(myBudget.outReasonBig, myBudget.out_, "지출")
-        pause()
+        myBudget.inputData(myBudget.Reasons[1], myBudget.out_, "지출")
+        TimingFunction.pause(myBudget)
     
     elif sel=='6':
         system("cls")
         print(myBudget)
-        pause()
+        TimingFunction.pause(myBudget)
 
     elif sel=='7':
         system("cls")
         myBudget.Save()
-        pause()
+        TimingFunction.pause(myBudget)
 
     elif sel=='8':
         system("cls")
         myBudget.Load()
-        pause()
+        TimingFunction.pause(myBudget)
 
     elif sel=='9':
-        system("cls")
-
-    elif sel=='10':
         system("cls")
         print("종료되었습니다.")
         break
