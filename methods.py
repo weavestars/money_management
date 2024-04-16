@@ -2,7 +2,7 @@ import datetime
 import os
 
 class TimingFunction():
-    """This Functions are for Loading"""
+    """These Functions are for Loading"""
     def loading(self,time):
         timeset=datetime.datetime.now()+datetime.timedelta(seconds=time)
         while datetime.datetime.now()<timeset:
@@ -24,7 +24,7 @@ class DateFunction():
         while True:
             datacheck=[]
             checklist=[str(v) for v in range(10)]
-            data=input("발생 월일을 입력하세요.\n=>2024년 02월 17일: 240217\n매년, 매월 발생하는 경우 해당 항목을 00으로 입력하세요.\n=>")
+            data=input("\n발생 월일을 입력하세요.\n=>2024년 02월 17일: 240217\n매년, 매월 발생하는 경우 해당 항목을 00으로 입력하세요.\n=>")
 
             for v in data:
                 if v not in checklist:
@@ -50,7 +50,7 @@ class DateFunction():
 class SaveFunction():
     """This Function is for Saving"""
     def SaveData(self,data0,data1,data2,data3,data4,data5):
-        f=open("/log.txt","w")
+        f=open(os.getcwd()+"/log.txt","w")
         """자산입력"""
         f.write("비유동자산\n")
         f.write(str(data0))
@@ -96,8 +96,7 @@ class SaveFunction():
 class LoadFunction():
     """This Function is for Loading"""
     def LoadData(self,type1,str):
-        f=open("/log.txt","r")
-
+        f=open(os.getcwd()+"/log.txt","r")
         while True:
             tempdata=f.readline().strip()
             if tempdata==str:
@@ -136,7 +135,7 @@ class LetterTransFunction():
             tt="0"
             o="0"
             while True:
-                templist=",".join(input("금액을 입력하세요.\n=>").replace(" ","")).split(",")
+                templist=",".join(input("\n금액을 입력하세요.\n=>").replace(" ","")).split(",")
 
                 if '만' in templist:
                     templist[templist.index('만')]="-2"

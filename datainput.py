@@ -11,7 +11,7 @@ class budget(TimingFunction, SaveFunction, LoadFunction, LetterTransFunction, Da
         self.f_out_=[]
         self.in_=[]
         self.out_=[]
-        self.Reasons=np.array([["Pin Money","Investment","Scholarship","Others"], ["여가","투자","식비","기타"]])
+        self.Reasons=np.array([["Pin Money","Investment","Scholarship","Others"], ["Leisure","Investment","Food","Others"]])
 
     def inputData(self, reason, destination, string): 
         os.system('cls')
@@ -41,6 +41,8 @@ class budget(TimingFunction, SaveFunction, LoadFunction, LetterTransFunction, Da
             temporaryList.append(sel)
 
             sel=LetterTransFunction.GetOrChangeValue(self,1)
+            if (destination==self.f_out_) | (destination==self.out_):
+                sel=-int(sel)
             temporaryList.append(sel)
 
             date=DateFunction()
@@ -130,10 +132,30 @@ class budget(TimingFunction, SaveFunction, LoadFunction, LetterTransFunction, Da
         else:
             return
     
+    def Apply(self):
+        while True:
+            sel=input("변동사항을 적용하시겠습니까? (Y/N)\n=>")
+            if sel=='Y':
+                for iter in [self.in_,self.out_]:
+                    for v in iter:
+                        if v[5]=='U':
+                            self.current_budget[1]=str(int(self.current_budget[1])+int(v[2]))
+                            v[5]='A'
+                        elif v[5]=='A':
+                            pass
+                    print("성공적으로 적용되었습니다.")
+                    TimingFunction.pause(self)
+                break
+            elif sel=='N':
+                print('취소되었습니다.')
+                return
+            else:
+                print("잘못입력하셨습니다! 다시 입력하십시오.")
+
     def editCurrentBudget(self):
         #This Function Changes 만, 원 Value To Number Needed. If the format doesn't match it asks for another input.
         while True:
-            choice=input(f"어떤 항목을 수정하시겠습니까?\n#1. 비유동자산:{self.current_budget[0]}\n#2. 유동자산:{self.current_budget[1]}\n=>")
+            choice=input(f"어떤 항목을 수정하시겠습니까?\n#1. 비유동자산:{self.current_budget[0]}\n#2. 유동자산:{self.current_budget[1]}\n처음으로 돌아가시려면 다른 번호를 누르세요.\n=>")
             if choice=='1':
                 self.current_budget[0]=LetterTransFunction.GetOrChangeValue(self,1)
                 
@@ -146,12 +168,12 @@ class budget(TimingFunction, SaveFunction, LoadFunction, LetterTransFunction, Da
                 print("성공적으로 입력되었습니다.")
                 TimingFunction.loading(self,1)
                 break
-            else:
-                print("잘못 입력하셨습니다!")
-                TimingFunction.loading(self,1)
-                break
 
-        
+            else:
+                os.system('cls')
+                print("로딩...")
+                TimingFunction.loading(self,0.5)
+                break
 
     def Save(self):
         save=SaveFunction()
@@ -159,14 +181,19 @@ class budget(TimingFunction, SaveFunction, LoadFunction, LetterTransFunction, Da
         print("성공적으로 저장되었습니다!\n")
 
     def Load(self):
+
         load=LoadFunction()
-        self.current_budget[0]=load.LoadData(self.current_budget[0],"비유동자산")
-        self.current_budget[1]=load.LoadData(self.current_budget[1],"유동자산")
-        self.f_in_=load.LoadData(self.f_in_,"고정수입")
-        self.f_out_=load.LoadData(self.f_out_,"고정지출")
-        self.in_=load.LoadData(self.in_,"변동수입")
-        self.out_=load.LoadData(self.out_,"변동지출")
-        print("성공적으로 불러왔습니다!")
+        if os.path.isfile(os.getcwd()+'/log.txt')==False:
+            print('불러올 항목이 없습니다!')
+            return
+        else:
+            self.current_budget[0]=load.LoadData(self.current_budget[0],"비유동자산")
+            self.current_budget[1]=load.LoadData(self.current_budget[1],"유동자산")
+            self.f_in_=load.LoadData(self.f_in_,"고정수입")
+            self.f_out_=load.LoadData(self.f_out_,"고정지출")
+            self.in_=load.LoadData(self.in_,"변동수입")
+            self.out_=load.LoadData(self.out_,"변동지출")
+            print("성공적으로 불러왔습니다!")
 
     def __str__(self):
         totalfin=self.getTotalValue(self.f_in_)

@@ -1,3 +1,3 @@
-from datetime import date, timedelta
+import numpy as np
 
-print(["I am Awesome","1"])
+print(np.zeros((2,3)))
